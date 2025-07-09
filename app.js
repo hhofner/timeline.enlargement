@@ -1,6 +1,6 @@
 import van from "https://cdn.jsdelivr.net/gh/vanjs-org/van/public/van-1.5.5.min.js"
 
-const {input, button, div, p} = van.tags
+const {input, button, div, header, p} = van.tags
 
 const hasTimeline = van.state(false)
 const serverUrl = van.state("")
@@ -30,10 +30,11 @@ const fetchTestTimeline = async () => {
 }
 
 const Timeline = () => div(
-  // Directly return an array of div() elements, not wrapped in another div()
   posts.val.map(post =>
-    div({style: "border-bottom:1px solid #ccc; padding:8px"},
-      p({innerHTML: post.content})  // safely uses Mastodon's HTML
+    div({class: 'post'},
+      header({class: 'post-header'}, `${post.account.display_name}`),
+      p({class: 'text', innerHTML: post.content}),
+      button({class: 'text-btn'}, 'View Post')
     )
   )
 )
@@ -47,7 +48,7 @@ const Init = () => div(() =>
         placeholder: "https://your.mastodon.server",
         oninput: e => serverUrl.val = e.target.value
       }),
-      button({onclick: fetchTestTimeline}, "view")
+      button({onclick: fetchTimeline}, "view")
     )
 )
 
